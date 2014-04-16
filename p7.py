@@ -6,6 +6,9 @@ from pox.lib.packet.ipv4 import ipv4,tcp
 from pox.lib.addresses import IPAddr,EthAddr
 import pox.openflow.libopenflow_01 as of
 
+ANOTHERGLOBALVARIABLE = "but Sommers doesn't like global variables\n"
+totally_shocked_student = "surely you can't be serious!\n"
+Curt_Mahoney = "I am serious. And don't call me Shirley\n"
 
 class p7(object):
     def __init__ (self):
@@ -28,10 +31,6 @@ class p7(object):
         tcphdr = packet.find('tcp')
 
         if tcphdr is None:
-            # for any non-TCP traffic, flood out all ports
-            #Houston, we have a problem.
-            #Surely you aren't serious!
-            #I am serious.  And don't call me Shirley.
             flood = of.ofp_action_output()
             flood.port = of.OFPP_FLOOD
             pktout = of.ofp_packet_out()

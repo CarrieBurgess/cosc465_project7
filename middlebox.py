@@ -16,6 +16,12 @@ from pox.lib.addresses import EthAddr,IPAddr
 from srpy_common import log_info, log_debug, log_warn, SrpyShutdown, SrpyNoPackets, debugger
 import time
 
+'''
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  NameError: Global identifier 'variable' not found.  It is hiding from sommers_ire.exe`
+'''
+
 class Middlebox(object):
     def __init__(self, net):
         self.net = net
@@ -33,6 +39,13 @@ class Middlebox(object):
             tcphdr = pkt.find('tcp')
             if tcphdr is not None:
                 log_debug("Got packet for TCP source: {}".format(pkt.dump()))
+                tcp = pkt.payload
+                f = None
+                if(tcp.SYN):
+                    f = open('contentlog.txt','w')
+                else:
+                    f = open('contentlog.txt','a')
+
 
                 # your code should start at this indentation level; you're
                 # only concerned with TCP packets.  
@@ -40,6 +53,7 @@ class Middlebox(object):
 
 
 
+                f.close()
                 # in the end, you should forward the packet out the same
                 # device (and the packet will almost certainly have been
                 # modified in some way before you send it back out.)
@@ -52,3 +66,4 @@ def srpy_main(net):
     mb = Middlebox(net)
     mb.main()
     net.shutdown()
+
