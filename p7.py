@@ -33,8 +33,11 @@ class p7(object):
             #Surely you aren't serious!
             #I am serious.  And don't call me Shirley.
             flood = of.ofp_action_output()
-            flood.port = flood.OFPP_FLOOD
-            pktout = of.ofp_packet_out(None, inport, [flood], packet)
+            flood.port = of.OFPP_FLOOD
+            pktout = of.ofp_packet_out()
+            pktout.in_port = inport
+            pktout.actions = [flood]
+            pktout.data = packet
             event.connection.send(pktout.pack())
 
         else: 
