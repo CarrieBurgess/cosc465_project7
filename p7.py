@@ -42,7 +42,26 @@ class p7(object):
 
         else: 
             # for any TCP traffic, install Openflow rules
-            pass
+            dstip = str(packet.dstip)
+            actions = []
+            if(IPAddr('10.0.0.4') in [packet.srcip, packet.dstip] or inport!=5):
+                actions += [of.ofp_action_dl_addr(
+                        dl_addr = EthAddr('00:00:00:00:00:05'))
+                outport = 5
+            else:
+                outport = int(dstip[len(dstip)-1])
+
+            actions += [of.ofp_action_output(port = outport)]
+            send_flowmod(event, packet, actions) 
+
+def send_flowmod(event, packet, actions):
+    flowmod = of.ofp_flow_mod(command = of.OFPC_ADD,
+                    idle_timeout=10,
+                    hard_timeout=10,
+                    buffer_id = event.ofp.buffer_id
+                    match = of.ofp_match.from_packet(packet, event.port)
+                    actions = actions)
+    event.connection.send(flowmod.pack())
 
 
 def launch():
