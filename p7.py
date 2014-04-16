@@ -29,7 +29,13 @@ class p7(object):
 
         if tcphdr is None:
             # for any non-TCP traffic, flood out all ports
-            pass
+            #Houston, we have a problem.
+            #Surely you aren't serious!
+            #I am serious.  And don't call me Shirley.
+            flood = of.ofp_action_output()
+            flood.port = flood.OFPP_FLOOD
+            pktout = of.ofp_packet_out(None, inport, [flood], packet)
+            event.connection.send(pktout.pack())
 
         else: 
             # for any TCP traffic, install Openflow rules
